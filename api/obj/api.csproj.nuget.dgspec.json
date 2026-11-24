@@ -53,10 +53,6 @@
               "target": "Package",
               "version": "[10.0.0, )"
             },
-            "Microsoft.Extensions.Identity.Core": {
-              "target": "Package",
-              "version": "[10.0.0, )"
-            },
             "SQLitePCLRaw.lib.e_sqlite3": {
               "target": "Package",
               "version": "[3.53.3, )"

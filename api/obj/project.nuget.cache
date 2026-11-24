@@ -1,6 +1,6 @@
 {
   "version": 2,
-  "dgSpecHash": "mO7CKW+50M4=",
+  "dgSpecHash": "kj6v63dbS18=",
   "success": true,
   "projectFilePath": "/workspaces/test_item/api/api.csproj",
   "expectedPackageFiles": [
@@ -13,7 +13,6 @@
     "/home/vscode/.nuget/packages/microsoft.entityframeworkcore.sqlite/10.0.0/microsoft.entityframeworkcore.sqlite.10.0.0.nupkg.sha512",
     "/home/vscode/.nuget/packages/microsoft.entityframeworkcore.sqlite.core/10.0.0/microsoft.entityframeworkcore.sqlite.core.10.0.0.nupkg.sha512",
     "/home/vscode/.nuget/packages/microsoft.extensions.dependencymodel/10.0.0/microsoft.extensions.dependencymodel.10.0.0.nupkg.sha512",
-    "/home/vscode/.nuget/packages/microsoft.extensions.identity.core/10.0.0/microsoft.extensions.identity.core.10.0.0.nupkg.sha512",
     "/home/vscode/.nuget/packages/microsoft.identitymodel.abstractions/8.0.1/microsoft.identitymodel.abstractions.8.0.1.nupkg.sha512",
     "/home/vscode/.nuget/packages/microsoft.identitymodel.jsonwebtokens/8.0.1/microsoft.identitymodel.jsonwebtokens.8.0.1.nupkg.sha512",
     "/home/vscode/.nuget/packages/microsoft.identitymodel.logging/8.0.1/microsoft.identitymodel.logging.8.0.1.nupkg.sha512",
@@ -26,18 +25,5 @@
     "/home/vscode/.nuget/packages/sqlitepclraw.provider.e_sqlite3/2.1.11/sqlitepclraw.provider.e_sqlite3.2.1.11.nupkg.sha512",
     "/home/vscode/.nuget/packages/system.identitymodel.tokens.jwt/8.0.1/system.identitymodel.tokens.jwt.8.0.1.nupkg.sha512"
   ],
-  "logs": [
-    {
-      "code": "NU1510",
-      "level": "Warning",
-      "message": "PackageReference Microsoft.Extensions.Identity.Core will not be pruned. Consider removing this package from your dependencies, as it is likely unnecessary.",
-      "projectPath": "/workspaces/test_item/api/api.csproj",
-      "warningLevel": 1,
-      "filePath": "/workspaces/test_item/api/api.csproj",
-      "libraryId": "Microsoft.Extensions.Identity.Core",
-      "targetGraphs": [
-        "net10.0"
-      ]
-    }
-  ]
+  "logs": []
 }
