@@ -10,6 +10,7 @@ RUN apt-get update && apt-get install -y \
     wget \
     unzip \
     zip \
+    sqlite3 \
     git \
     git-lfs \
     jq \
