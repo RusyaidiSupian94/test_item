@@ -1,41 +1,74 @@
+using System.Text;
+using AuthApi.Data;
+using AuthApi.Models;
+using Microsoft.AspNetCore.Authentication.JwtBearer;
+using Microsoft.AspNetCore.Identity;
+using Microsoft.EntityFrameworkCore;
+using Microsoft.IdentityModel.Tokens;
+
 var builder = WebApplication.CreateBuilder(args);
 
-// Add services to the container.
-// Learn more about configuring OpenAPI at https://aka.ms/aspnet/openapi
-builder.Services.AddOpenApi();
+var connectionString = builder.Configuration.GetConnectionString("DefaultConnection")
+    ?? "Data Source=data/app.db";
+
+var databaseDirectory = Path.Combine(builder.Environment.ContentRootPath, "data");
+Directory.CreateDirectory(databaseDirectory);
+
+builder.Services.AddDbContext<AppDbContext>(options =>
+    options.UseSqlite(connectionString));
+
+builder.Services.AddSingleton<IPasswordHasher<User>, PasswordHasher<User>>();
+
+var jwtKey = builder.Configuration["Jwt:Key"]
+    ?? throw new InvalidOperationException("Jwt:Key is missing.");
+var jwtIssuer = builder.Configuration["Jwt:Issuer"] ?? "AuthApi";
+var jwtAudience = builder.Configuration["Jwt:Audience"] ?? "FlutterApp";
+
+if (Encoding.UTF8.GetByteCount(jwtKey) < 32)
+{
+    throw new InvalidOperationException("Jwt:Key must contain at least 32 bytes.");
+}
+
+builder.Services.AddCors(options =>
+{
+    // Open CORS is convenient for this learning project. Restrict the origin in production.
+    options.AddPolicy("Flutter", policy =>
+        policy.AllowAnyOrigin()
+            .AllowAnyHeader()
+            .AllowAnyMethod());
+});
+
+builder.Services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
+    .AddJwtBearer(options =>
+    {
+        options.TokenValidationParameters = new TokenValidationParameters
+        {
+            ValidateIssuerSigningKey = true,
+            IssuerSigningKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(jwtKey)),
+            ValidateIssuer = true,
+            ValidIssuer = jwtIssuer,
+            ValidateAudience = true,
+            ValidAudience = jwtAudience,
+            ValidateLifetime = true,
+            ClockSkew = TimeSpan.FromSeconds(30)
+        };
+    });
+
+builder.Services.AddAuthorization();
+builder.Services.AddControllers();
 
 var app = builder.Build();
 
-// Configure the HTTP request pipeline.
-if (app.Environment.IsDevelopment())
+using (var scope = app.Services.CreateScope())
 {
-    app.MapOpenApi();
+    var db = scope.ServiceProvider.GetRequiredService<AppDbContext>();
+    db.Database.EnsureCreated();
 }
 
-app.UseHttpsRedirection();
+app.UseCors("Flutter");
+app.UseAuthentication();
+app.UseAuthorization();
 
-var summaries = new[]
-{
-    "Freezing", "Bracing", "Chilly", "Cool", "Mild", "Warm", "Balmy", "Hot", "Sweltering", "Scorching"
-};
-
-app.MapGet("/weatherforecast", () =>
-{
-    var forecast =  Enumerable.Range(1, 5).Select(index =>
-        new WeatherForecast
-        (
-            DateOnly.FromDateTime(DateTime.Now.AddDays(index)),
-            Random.Shared.Next(-20, 55),
-            summaries[Random.Shared.Next(summaries.Length)]
-        ))
-        .ToArray();
-    return forecast;
-})
-.WithName("GetWeatherForecast");
+app.MapControllers();
 
 app.Run();
-
-record WeatherForecast(DateOnly Date, int TemperatureC, string? Summary)
-{
-    public int TemperatureF => 32 + (int)(TemperatureC / 0.5556);
-}
