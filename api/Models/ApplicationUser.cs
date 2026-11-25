@@ -1,10 +1,11 @@
 using System.ComponentModel.DataAnnotations;
 using Microsoft.EntityFrameworkCore;
 
-namespace AuthApi.Models;
+namespace Api.Models;
 
+// Email unik supaya satu email tidak digunakan oleh dua akaun.
 [Index(nameof(Email), IsUnique = true)]
-public class User
+public class ApplicationUser
 {
     public int Id { get; set; }
 
@@ -14,6 +15,7 @@ public class User
     [MaxLength(200)]
     public string Email { get; set; } = string.Empty;
 
+    // Simpan hash password, bukan password asal.
     [MaxLength(500)]
     public string PasswordHash { get; set; } = string.Empty;
 
