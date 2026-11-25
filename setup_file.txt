@@ -23,3 +23,10 @@ Step To Add
 7 - Run command "flutter create ."
 8 - Run command "flutter run -d web-server --web-port 8080"
 9 - Run command "flutter build web"
+
+Step Untuk sqlLite3
+1 - untuk check data perlu using command sqlite3 databasename
+2 - run 3 command ".headers on", ".mode column", and ".tables"
+3 - then it will show list of tables
+4 - then can write query on it
+5 - to quit write command ".quit"
